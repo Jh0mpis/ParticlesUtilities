@@ -1,6 +1,7 @@
 #include "../../../CarpetX/CarpetX/src/driver.hxx"
 #include "./include/Particles.hxx"
 #include "./include/ParticlesContainer.hxx"
+#include "./include/Initializers.hxx"
 
 using ParticleData = Particles::PhotonsData;
 
@@ -18,6 +19,6 @@ extern "C" void test_setup(CCTK_ARGUMENTS) {
 
 extern "C" void test(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;
-  g_nupcs[0]->initialize();
+  g_nupcs[0]->initialize(test_initializer<PC>, 100);
   g_nupcs[0]->evolve();
 }
