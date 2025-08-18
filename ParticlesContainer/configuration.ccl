@@ -2,6 +2,6 @@
 #
 REQUIRES AMREX NSIMD
 
-PROVIDES Particles
+PROVIDES ParticlesContainer
 {
 }
