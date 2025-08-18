@@ -17,7 +17,6 @@
 #define PARTICLESCONTAINER_H
 
 // Import libraries
-#include "AMReX_Config.H"
 #include "BaseParticlesContainer.hxx"
 #include <AMReX_AmrParticles.H>
 #include <AMReX_MultiFab.H>
@@ -26,52 +25,22 @@
 #include <AMReX_REAL.H>
 #include <cctk_Arguments.h>
 
-static constexpr const char *INFO = "INFO (GeodesicsIntegratorX/Particles): ";
-
-namespace Iterator {
-
-template <typename StructType>
-class ParticleIterator
-    : public amrex::ParIter<0, 0, StructType::n_attributes, 0> {
-public:
-  using Base = amrex::ParIter<0, 0, StructType::n_attributes, 0>;
-  using Base::ParIter;
-  using RealVector = typename amrex::ParIter<
-      0, 0, StructType::n_attributes>::ContainerType::RealVector;
-
-  const std::array<RealVector, StructType::n_attributes> &GetAttribs() const {
-    return this->GetStructOfArrays().GetRealData();
-  }
-
-  std::array<RealVector, StructType::n_attributes> &GetAttribs() {
-    return this->GetStructOfArrays().GetRealData();
-  }
-
-  const RealVector &GetAttribs(int comp) const {
-    return this->GetStructOfArrays().GetRealData(comp);
-  }
-
-  RealVector &GetAttribs(int comp) {
-    return this->GetStructOfArrays().GetRealData(comp);
-  }
-}; // class ParicleIterator
-
-} // namespace Iterator
-
 namespace Containers {
 
 // #############################################################################
 //                   PhotonsContainer::CLASS INITIALIZATION
 // #############################################################################
+using namespace BaseContainer;
+
 template <typename StructType>
 class PhotonsContainer
-    : public BaseParticlesContainer::BaseParticlesContainer<StructType> {
+    : public BaseParticleContainer<PhotonsContainer<StructType>,StructType> {
 
 public:
-  PhotonsContainer(amrex::AmrCore *amr_core)
-      : BaseParticlesContainer::BaseParticlesContainer<StructType>(amr_core) {}
+    // Using BaseParticlesContainer constructor
+  using Base = BaseParticleContainer<PhotonsContainer<StructType>, StructType>;
+  using Base::Base;
 
-  void initialize() override;
   void evolve() override;
 }; // PhotonsContainer class
 
@@ -79,24 +48,10 @@ public:
 //                   PhotonsContainer::METHODS DECLARATION
 // ##############################################################################
 
-template <typename StructType> void PhotonsContainer<StructType>::initialize() {
-  std::cout << INFO << "Initializing Photons with "
-            << StructType::n_attributes << " attributes." << std::endl;
-  std::cout << INFO << "Initializing Photons in "
-            << AMREX_SPACEDIM << " dimensions." << std::endl;
-} // PhotonsContainer::initialize method
-
 template <typename StructType> void PhotonsContainer<StructType>::evolve() {
-  std::cout << INFO << "Evolving Particles" << std::endl;
+  std::cout << this->PARTICLE_UTILITIES_INFO << "Evolving "<<this->name
+            << std::endl;
 } // PhotonsContainer::evolve
-
-// #############################################################################
-//                   MassiveContainer::CLASS INITIALIZATION
-// #############################################################################
-
-template <typename StructType>
-class MassiveContainer
-    : public BaseParticlesContainer::BaseParticlesContainer<StructType> {};// MassiveContainer class
 
 } // namespace Containers
 
