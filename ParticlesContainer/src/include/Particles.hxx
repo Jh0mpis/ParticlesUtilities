@@ -8,6 +8,7 @@
 namespace Particles {
 // Struct to managing null particles
 struct BaseParticleData {
+  static constexpr const char *name = "Basic Particles";
   enum {
     // Particle position
     x = 0, y, z,
@@ -20,6 +21,7 @@ struct BaseParticleData {
 
 // Struct to managing null particles
 struct PhotonsData {
+  static constexpr const char *name = "Photons";
   enum {
     // Photon position
     x = 0, y, z,
@@ -34,6 +36,7 @@ struct PhotonsData {
 
 // Struct to managing massive particles
 struct MassiveParticleData {
+  static constexpr const char *name = "Massive Particles";
   enum {
     // Massive particle position
     x = 0, y, z,
