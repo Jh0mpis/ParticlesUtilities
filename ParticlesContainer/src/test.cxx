@@ -19,6 +19,6 @@ extern "C" void test_setup(CCTK_ARGUMENTS) {
 
 extern "C" void test(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;
-  g_nupcs[0]->initialize(test_initializer<PC>, 100);
+  g_nupcs[0]->initialize(test_initializer<ParticleData, PC>, {4, 4, 4});
   g_nupcs[0]->evolve();
 }
