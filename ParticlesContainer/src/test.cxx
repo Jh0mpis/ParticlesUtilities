@@ -1,6 +1,6 @@
 #include "../../../CarpetX/CarpetX/src/driver.hxx"
 #include "./include/Particles.hxx"
-#include "./include/ParticlesContainer.hxx"
+#include "./include/TestParticlesContainer.hxx"
 #include "./include/Initializers.hxx"
 
 using ParticleData = Particles::PhotonsData;
@@ -15,10 +15,11 @@ extern "C" void test_setup(CCTK_ARGUMENTS) {
     const auto &patchdata = CarpetX::ghext->patchdata.at(patch);
     g_nupcs.push_back(std::make_unique<PC>(patchdata.amrcore.get()));
   }
+
+  g_nupcs[0]->initialize(Initializer::random_initializer<ParticleData, PC>, {4, 4, 4});
 }
 
 extern "C" void test(CCTK_ARGUMENTS) {
   DECLARE_CCTK_PARAMETERS;
-  g_nupcs[0]->initialize(test_initializer<ParticleData, PC>, {4, 4, 4});
   g_nupcs[0]->evolve();
 }

@@ -4,7 +4,7 @@ SCHEDULE test_setup AT initial
   OPTIONS: global
 } "Setup"
 
-SCHEDULE test AT initial AFTER test_setup
+SCHEDULE test AT evol
 {
     LANG: C
     OPTIONS: global
