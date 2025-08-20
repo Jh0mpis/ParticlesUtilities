@@ -9,6 +9,8 @@
  * class can use this functions (if the struct is well defined). If you want to
  * create a custom initialization this should be templated in the same way.
  */
+#ifndef INITIALIZERS_H
+
 #include "AMReX_Box.H"
 #include "AMReX_Config.H"
 #include "AMReX_MFIter.H"
@@ -18,6 +20,8 @@
 #include "AMReX_Scan.H"
 #include <array>
 #include <iostream>
+
+namespace Initializer {
 
 /**
  * Initialize the particles inside of a sphere with random velocities.
@@ -42,8 +46,9 @@ void spherical_initializer(ParticleContainerClass &pc,
 
   // Print information message.
   std::cout << pc.PARTICLE_UTILITIES_INFO << "Initializing " << num_ppc << " "
-            << pc.name << " with " << pc.n_attributes << " attributes in "
-            << AMREX_SPACEDIM << " dimensions." << std::endl;
+            << pc.name << " inside of a sphere with " << pc.n_attributes
+            << " attributes in " << AMREX_SPACEDIM << " dimensions."
+            << std::endl;
 
   // Data refinement level
   const int lev = 0;
@@ -267,4 +272,157 @@ void spherical_initializer(ParticleContainerClass &pc,
   // Print out the Update
   std::cout << pc.PARTICLE_UTILITIES_INFO << num_ppc
             << " Particles per cell have been generated." << std::endl;
-}
+} // Function spherical_initializer
+
+template <typename StructType, typename ParticleContainerClass>
+void random_initializer(ParticleContainerClass &pc,
+                        const std::array<int, AMREX_SPACEDIM> nppc) {
+
+  // Get the total number of particles depending on the dimensions.
+#if (AMREX_SPACEDIM == 1)
+  const int num_ppc = nppc[0];
+#elif (AMREX_SPACEDIM == 2)
+  const int num_ppc = nppc[0] * nppc[1];
+#elif (AMREX_SPACEDIM == 3)
+  const int num_ppc = nppc[0] * nppc[1] * nppc[2];
+#endif
+
+  // Print information message.
+  std::cout << pc.PARTICLE_UTILITIES_INFO << "Randomly initializing " << num_ppc
+            << " " << pc.name << " with " << pc.n_attributes
+            << " attributes in " << AMREX_SPACEDIM << " dimensions."
+            << std::endl;
+
+  // Data refinement level
+  const int lev = 0;
+
+  // Get the with of the discretization on each direction.
+  const auto dx = pc.Geom(lev).CellSizeArray();
+
+  // Get the lower and higher value over the ParticleContainer Geometry
+  const auto p_lo = pc.Geom(lev).ProbLoArray();
+  const auto p_hi = pc.Geom(lev).ProbHiArray();
+
+  // Iterating over all the tiles of the particle data structure
+  for (amrex::MFIter mfi = pc.MakeMFIter(lev); mfi.isValid(); ++mfi) {
+
+    // get each tile box
+    const amrex::Box &tile_box = mfi.tilebox();
+
+    // Get the tile bounds
+    const auto lo = amrex::lbound(tile_box);
+    const auto hi = amrex::ubound(tile_box);
+
+        // Get a reference to the particles
+    auto &particles = pc.GetParticles(lev);
+    auto &particle_tile =
+        particles[std::make_pair(mfi.index(), mfi.LocalTileIndex())];
+
+    // Determines the current size and the required new size
+    auto old_size = particle_tile.GetArrayOfStructs().size();
+    auto new_size = old_size + num_ppc;
+
+    // Resize the container once, we do not need to do it one by one
+    particle_tile.resize(new_size);
+
+    // Gets raw pointers to the two different ways particle data is stored for
+    // performance reasons: Array of Struct (AoS) and Struct of Arrays (SoA)
+    typename ParticleContainerClass::ParticleType *p_struct =
+        particle_tile.GetArrayOfStructs()().data();
+    auto arrdata = particle_tile.GetStructOfArrays().realarray();
+
+    // get the current process id
+    int proc_id = amrex::ParallelDescriptor::MyProc();
+
+    // Start a for loop with Random Number evolution
+    amrex::ParallelForRNG(
+        tile_box,
+        [=] AMREX_GPU_DEVICE(int i, int j, int k,
+                             amrex::RandomEngine const &engine) noexcept {
+          // Calculate cell_id
+          int ix = i - lo.x;
+          int iy{0}, iz{0};
+
+          int nx = hi.x - lo.x + 1;
+          int ny{0}, nz{0};
+
+          unsigned int uix = amrex::min(nx - 1, amrex::max(0, ix));
+          unsigned int uiy{0}, uiz{0};
+
+#if (AMREX_SPACEDIM == 2)
+          iy = j - lo.y;
+          ny = hi.y - lo.y + 1;
+          uiy = amrex::min(ny - 1, amrex::max(0, iy));
+#elif (AMREX_SPACEDIM == 3)
+          iy = j - lo.y;
+          ny = hi.y - lo.y + 1;
+          uiy = amrex::min(ny - 1, amrex::max(0, iy));
+          iz = k - lo.z;
+          nz = hi.z - lo.z + 1;
+          uiz = amrex::min(nz - 1, amrex::max(0, iz));
+#endif
+
+          unsigned int cell_id = (uix * ny + uiy) * nz + uiz;
+
+          // Retrievers the starting write index (pidx) for the current cell
+          // (i, j, k) from the offsets array that was calculated by the
+          // exclusive_scan
+          int pidx = old_size;
+
+          for (int i_part = 0; i_part < num_ppc; i_part++) {
+            amrex::Real ratio[AMREX_SPACEDIM];
+
+            // Generate a random position
+            ratio[0] = amrex::Random(engine);
+            amrex::Real x = p_lo[0] + (i + ratio[0]) * dx[0];
+
+#if (AMREX_SPACEDIM == 2)
+            ratio[1] = amrex::Random(engine);
+            amrex::Real y = p_lo[1] + (j + ratio[1]) * dx[1];
+#elif (AMREX_SPACEDIM == 3)
+            ratio[1] = amrex::Random(engine);
+            ratio[2] = amrex::Random(engine);
+            amrex::Real y = p_lo[1] + (j + ratio[1]) * dx[1];
+            amrex::Real z = p_lo[2] + (k + ratio[2]) * dx[2];
+#endif
+
+            // Compute a random initial momentum taking care of more than one
+            // dimensions
+            const amrex::Real pt = 1.0;
+
+            amrex::Real costh = AMREX_SPACEDIM > 1 ? Random(engine) * 2 - 1 : 1;
+            amrex::Real ph = Random(engine) * (2 * M_PI);
+            amrex::Real sinth =
+                std::sqrt(amrex::max(amrex::Real(0), 1 - costh * costh));
+            amrex::Real cosph = AMREX_SPACEDIM > 2 ? std::cos(ph) : 1;
+            amrex::Real sinph = AMREX_SPACEDIM > 2 ? std::sin(ph) : 1;
+
+            // Create the particle and add it to the container
+            typename ParticleContainerClass::ParticleType &p = p_struct[pidx];
+            p.id() = pidx + 1;
+            p.cpu() = proc_id;
+            p.pos(0) = x;
+
+            arrdata[StructType::vx][pidx] = pt * sinth * cosph;
+#if (AMREX_SPACEDIM == 2)
+            p.pos(1) = y;
+            arrdata[StructType::vy][pidx] = pt * sinth * sinph;
+#elif (AMREX_SPACEDIM == 3)
+            p.pos(1) = y;
+            p.pos(2) = z;
+            arrdata[StructType::vy][pidx] = pt * sinth * sinph;
+            arrdata[StructType::vz][pidx] = pt * costh;
+#endif
+
+            // Update the particles counter
+            ++pidx;
+          }
+        });
+  }
+
+  // Print out the Update
+  std::cout << pc.PARTICLE_UTILITIES_INFO << num_ppc
+            << " Particles per cell have been generated." << std::endl;
+} // Function random_initializer
+} // namespace Initializer
+#endif // !INITIALIZERS_H
