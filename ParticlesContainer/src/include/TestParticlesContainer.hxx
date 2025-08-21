@@ -17,7 +17,7 @@
 #define PARTICLESCONTAINER_H
 
 // Import libraries
-#include "BaseParticlesContainer.hxx"
+#include "BaseParticleContainer.hxx"
 #include <AMReX_AmrParticles.H>
 #include <AMReX_MultiFab.H>
 #include <AMReX_MultiFabUtil.H>
