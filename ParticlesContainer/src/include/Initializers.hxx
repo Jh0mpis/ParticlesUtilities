@@ -10,6 +10,7 @@
  * create a custom initialization this should be templated in the same way.
  */
 #ifndef INITIALIZERS_H
+#define INITIALIZERS_H
 
 #include "AMReX_Box.H"
 #include "AMReX_Config.H"

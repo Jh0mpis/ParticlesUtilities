@@ -5,6 +5,9 @@
  * needed for a particle in order to be used on a <Particles>Container instance.
  */
 
+#ifndef PARTICLES_HXX
+#define PARTICLES_HXX
+
 namespace Particles {
 // Struct to managing null particles
 struct BaseParticleData {
@@ -52,3 +55,4 @@ struct MassiveParticleData {
 }; // struct MassiveParticleData
 
 } // namespace Particles
+#endif // !PARTICLES_HXX
