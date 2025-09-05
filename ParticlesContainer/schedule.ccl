@@ -1,11 +1,11 @@
-SCHEDULE test_setup AT initial
-{
-  LANG: C
-  OPTIONS: global
-} "Setup"
-
-SCHEDULE test AT evol
-{
-    LANG: C
-    OPTIONS: global
-} "testing"
+#SCHEDULE test_setup AT initial
+#{
+#  LANG: C
+#  OPTIONS: global
+#} "Setup"
+#
+#SCHEDULE test AT evol
+#{
+#    LANG: C
+#    OPTIONS: global
+#} "testing"

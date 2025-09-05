@@ -4,7 +4,6 @@ IMPLEMENTS: ParticlesContainer
 
 INHERITS: ADMBaseX AMReX
 
-USES INCLUDE HEADER: BaseParticlesContainer.hxx
-USES INCLUDE HEADER: TestParticlesContainer.hxx
-USES INCLUDE HEADER: Particles.hxx
-USES INCLUDE HEADER: Initializers.hxx
+INCLUDES HEADER: BaseParticleContainer.hxx IN BaseParticleContainer.hxx
+INCLUDES HEADER: Particles.hxx IN Particles.hxx
+INCLUDES HEADER: Initializers.hxx IN Initializers.hxx
