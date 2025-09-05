@@ -13,8 +13,6 @@ namespace Particles {
 struct BaseParticleData {
   static constexpr const char *name = "Basic Particles";
   enum {
-    // Particle position
-    x = 0, y, z,
     // Particle Velocity
     vx, vy, vz,
     // Number of attributes on the struct
@@ -26,8 +24,6 @@ struct BaseParticleData {
 struct PhotonsData {
   static constexpr const char *name = "Photons";
   enum {
-    // Photon position
-    x = 0, y, z,
     // Photon Velocity
     vx, vy, vz,
     // Photon Energy
@@ -41,8 +37,6 @@ struct PhotonsData {
 struct MassiveParticleData {
   static constexpr const char *name = "Massive Particles";
   enum {
-    // Massive particle position
-    x = 0, y, z,
     // Massive particle velocity
     vx, vy, vz,
     // Massive particle Energy

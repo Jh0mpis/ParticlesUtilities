@@ -20,6 +20,7 @@
 #include "AMReX_RandomEngine.H"
 #include "AMReX_Scan.H"
 #include <array>
+#include <cctk.h>
 #include <iostream>
 
 namespace Initializer {
@@ -46,10 +47,7 @@ void spherical_initializer(ParticleContainerClass &pc,
 #endif
 
   // Print information message.
-  std::cout << pc.PARTICLE_UTILITIES_INFO << "Initializing " << num_ppc << " "
-            << pc.name << " inside of a sphere with " << pc.n_attributes
-            << " attributes in " << AMREX_SPACEDIM << " dimensions."
-            << std::endl;
+  CCTK_INFO("Initializing particles using the spherical_initializer");
 
   // Data refinement level
   const int lev = 0;
@@ -61,8 +59,10 @@ void spherical_initializer(ParticleContainerClass &pc,
   const auto p_lo = pc.Geom(lev).ProbLoArray();
   const auto p_hi = pc.Geom(lev).ProbHiArray();
 
+  amrex::MFIter mfi = pc.MakeMFIter(lev);
+
   // Iterating over all the tiles of the particle data structure
-  for (amrex::MFIter mfi = pc.MakeMFIter(lev); mfi.isValid(); ++mfi) {
+  for (; mfi.isValid(); ++mfi) {
 
     // get each tile box
     const amrex::Box &tile_box = mfi.tilebox();
@@ -270,9 +270,6 @@ void spherical_initializer(ParticleContainerClass &pc,
         });
   }
 
-  // Print out the Update
-  std::cout << pc.PARTICLE_UTILITIES_INFO << num_ppc
-            << " Particles per cell have been generated." << std::endl;
 } // Function spherical_initializer
 
 template <typename StructType, typename ParticleContainerClass>
@@ -289,10 +286,7 @@ void random_initializer(ParticleContainerClass &pc,
 #endif
 
   // Print information message.
-  std::cout << pc.PARTICLE_UTILITIES_INFO << "Randomly initializing " << num_ppc
-            << " " << pc.name << " with " << pc.n_attributes
-            << " attributes in " << AMREX_SPACEDIM << " dimensions."
-            << std::endl;
+  CCTK_INFO("Initializing particles using the random_initializer");
 
   // Data refinement level
   const int lev = 0;
@@ -304,8 +298,12 @@ void random_initializer(ParticleContainerClass &pc,
   const auto p_lo = pc.Geom(lev).ProbLoArray();
   const auto p_hi = pc.Geom(lev).ProbHiArray();
 
+  amrex::MFIter mfi = pc.MakeMFIter(lev);
+  std::cout << "WHYYYYYYYYYYYY------------------------? " << mfi.isValid()
+            << std::endl;
+
   // Iterating over all the tiles of the particle data structure
-  for (amrex::MFIter mfi = pc.MakeMFIter(lev); mfi.isValid(); ++mfi) {
+  for (; mfi.isValid(); ++mfi) {
 
     // get each tile box
     const amrex::Box &tile_box = mfi.tilebox();
@@ -314,14 +312,15 @@ void random_initializer(ParticleContainerClass &pc,
     const auto lo = amrex::lbound(tile_box);
     const auto hi = amrex::ubound(tile_box);
 
-        // Get a reference to the particles
+    // Get a reference to the particles
     auto &particles = pc.GetParticles(lev);
     auto &particle_tile =
         particles[std::make_pair(mfi.index(), mfi.LocalTileIndex())];
 
     // Determines the current size and the required new size
     auto old_size = particle_tile.GetArrayOfStructs().size();
-    auto new_size = old_size + num_ppc;
+    auto new_size = old_size + num_ppc * (hi.x - lo.x + 1) * (hi.z - lo.z + 1) *
+                                   (hi.y - lo.y + 1);
 
     // Resize the container once, we do not need to do it one by one
     particle_tile.resize(new_size);
@@ -368,7 +367,7 @@ void random_initializer(ParticleContainerClass &pc,
           // Retrievers the starting write index (pidx) for the current cell
           // (i, j, k) from the offsets array that was calculated by the
           // exclusive_scan
-          int pidx = old_size;
+          int pidx = old_size + num_ppc * cell_id;
 
           for (int i_part = 0; i_part < num_ppc; i_part++) {
             amrex::Real ratio[AMREX_SPACEDIM];
@@ -415,15 +414,17 @@ void random_initializer(ParticleContainerClass &pc,
             arrdata[StructType::vz][pidx] = pt * costh;
 #endif
 
+            // std::cout << "# Particle t=0 " << p.id() << " (" << p.pos(0) << ", "
+            //           << p.pos(1) << ", " << p.pos(2) << ")" << std::endl;
+
             // Update the particles counter
             ++pidx;
           }
         });
+    std::cout << "PARTICLES CREATED: "
+              << particle_tile.GetArrayOfStructs().size() << std::endl;
   }
 
-  // Print out the Update
-  std::cout << pc.PARTICLE_UTILITIES_INFO << num_ppc
-            << " Particles per cell have been generated." << std::endl;
 } // Function random_initializer
 } // namespace Initializer
 #endif // !INITIALIZERS_H

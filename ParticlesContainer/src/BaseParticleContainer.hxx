@@ -17,7 +17,12 @@
 // Include libraries
 #include <AMReX_AmrParticles.H>
 #include <AMReX_Particles.H>
+#include <cctk.h>
 #include <cctk_Arguments.h>
+#include <cctk_Parameters.h>
+#include <cctk_core.h>
+#include <iostream>
+#include <string>
 
 // Starting the namespace
 namespace BaseContainer {
@@ -34,12 +39,12 @@ class BaseParticleContainer
 public:
   // Derived class type for future casts
   using ThisContainer = OtherContainer;
+  using ParticleType =
+      typename amrex::AmrParticleContainer<0, 0, StructType::n_attributes,
+                                           0>::ParticleType;
 
-  // INFO message for printing
-  static constexpr const char *PARTICLE_UTILITIES_INFO =
-      "INFO (ParticlesUtilities): ";
   // Name of the particles
-  static constexpr const char *name = StructType::name;
+  const std::string name = StructType::name;
   // Number of attributes per each particle
   static constexpr int n_attributes = StructType::n_attributes;
 
@@ -74,8 +79,33 @@ public:
   virtual void evolve() = 0;
   // virtual void computeRHS() = 0;
 
-  void outputParticlesAscii(CCTK_ARGUMENTS);
-  void outputParticlesPlot(CCTK_ARGUMENTS);
+  void outputParticlesAscii(CCTK_ARGUMENTS) {
+    DECLARE_CCTK_PARAMETERS;
+
+    const int it = cctkGH->cctk_iteration;
+    // if (out_tsv_every > 0 && it % out_tsv_every == 0) {
+      const std::string &file_name =
+     "/home/jh0mpis/simulations/geodesicsTest/plt_" + amrex::Concatenate(this->name, it);
+      amrex::Print() << " Writing ascii file " << file_name << "\n";
+
+      this->WriteAsciiFile(file_name);
+    // }
+  };
+
+  void outputParticlesPlot(CCTK_ARGUMENTS) {
+    DECLARE_CCTK_PARAMETERS;
+    // std::cout << out_plot_every << std::endl;
+
+    const int it = cctkGH->cctk_iteration;
+    // std::cout << out_plot_every << std::endl;
+    // if (out_plot_every > 0 && it % out_plot_every == 0) {
+    //   const std::string file_name =
+    //       out_dir + "/" + amrex::Concatenate(this->name, it);
+    //   amrex::Print() << " Writing plot file " << file_name << "\n";
+    //
+    //   this->WritePlotFile(name, this->name);
+    // }
+  };
 }; // class BaseParticlesContainer
 
 } // namespace BaseContainer
@@ -86,8 +116,7 @@ template <typename StructType>
 class ParticleIterator
     : public amrex::ParIter<0, 0, StructType::n_attributes, 0> {
 public:
-  using Base = amrex::ParIter<0, 0, StructType::n_attributes, 0>;
-  using Base::ParIter;
+  using amrex::ParIter<0, 0, StructType::n_attributes, 0>::ParIter;
   using RealVector = typename amrex::ParIter<
       0, 0, StructType::n_attributes>::ContainerType::RealVector;
 
@@ -95,7 +124,7 @@ public:
     return this->GetStructOfArrays().GetRealData();
   }
 
-  std::array<RealVector, StructType::n_attributes> &GetAttribs() {
+  std::array<RealVector, StructType::n_attributes> &GetAttributes() {
     return this->GetStructOfArrays().GetRealData();
   }
 
@@ -103,7 +132,7 @@ public:
     return this->GetStructOfArrays().GetRealData(comp);
   }
 
-  RealVector &GetAttribs(int comp) {
+  RealVector &GetAttributes(int comp) {
     return this->GetStructOfArrays().GetRealData(comp);
   }
 }; // class ParicleIterator
