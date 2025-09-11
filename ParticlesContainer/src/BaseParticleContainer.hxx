@@ -15,9 +15,10 @@
 #define BASEPARTICLESCONTAINER_HXX
 
 // Include libraries
+#include <cctk.h>
+
 #include <AMReX_AmrParticles.H>
 #include <AMReX_Particles.H>
-#include <cctk.h>
 #include <cctk_Arguments.h>
 #include <cctk_Parameters.h>
 #include <cctk_core.h>
@@ -37,12 +38,6 @@ template <typename OtherContainer, typename StructType>
 class BaseParticleContainer
     : public amrex::AmrParticleContainer<0, 0, StructType::n_attributes, 0> {
 public:
-  // Derived class type for future casts
-  using ThisContainer = OtherContainer;
-  using ParticleType =
-      typename amrex::AmrParticleContainer<0, 0, StructType::n_attributes,
-                                           0>::ParticleType;
-
   // Name of the particles
   const std::string name = StructType::name;
   // Number of attributes per each particle
@@ -69,9 +64,16 @@ public:
   template <typename Function>
   void initialize(Function initializer_function,
                   const std::array<int, AMREX_SPACEDIM> nppc) {
-    initializer_function(static_cast<ThisContainer &>(*this), nppc);
+    initializer_function(static_cast<OtherContainer &>(*this), nppc);
   };
 
+  template <typename Function>
+  void initialize(Function initializer_function,
+                  const int num_particles_per_cell,
+                  const amrex::MultiFab &metric, const int &level) {
+    initializer_function(static_cast<OtherContainer &>(*this),
+                         num_particles_per_cell, metric, level);
+  };
   /**
    * The evolve method evolve the system given the differential equations and
    * the computed rhs.
@@ -79,32 +81,30 @@ public:
   virtual void evolve() = 0;
   // virtual void computeRHS() = 0;
 
-  void outputParticlesAscii(CCTK_ARGUMENTS) {
-    DECLARE_CCTK_PARAMETERS;
+  void outputParticlesAscii(CCTK_ARGUMENTS, const int &plot_every,
+                            const std::string &out_dir) {
 
     const int it = cctkGH->cctk_iteration;
-    // if (out_tsv_every > 0 && it % out_tsv_every == 0) {
+    if (plot_every > 0 && it % plot_every == 0) {
       const std::string &file_name =
-     "/home/jh0mpis/simulations/geodesicsTest/plt_" + amrex::Concatenate(this->name, it);
-      amrex::Print() << " Writing ascii file " << file_name << "\n";
+          out_dir + "/" + amrex::Concatenate(this->name, it);
+      CCTK_VINFO(" Writing ascii file %s", file_name.c_str());
 
       this->WriteAsciiFile(file_name);
-    // }
+    }
   };
 
-  void outputParticlesPlot(CCTK_ARGUMENTS) {
-    DECLARE_CCTK_PARAMETERS;
-    // std::cout << out_plot_every << std::endl;
+  void outputParticlesPlot(CCTK_ARGUMENTS, const int &plot_every,
+                           const std::string &out_dir) {
 
     const int it = cctkGH->cctk_iteration;
-    // std::cout << out_plot_every << std::endl;
-    // if (out_plot_every > 0 && it % out_plot_every == 0) {
-    //   const std::string file_name =
-    //       out_dir + "/" + amrex::Concatenate(this->name, it);
-    //   amrex::Print() << " Writing plot file " << file_name << "\n";
-    //
-    //   this->WritePlotFile(name, this->name);
-    // }
+    if (plot_every > 0 && it % plot_every == 0) {
+      const std::string file_name =
+          out_dir + "/" + amrex::Concatenate("particles", it);
+      CCTK_VINFO(" Writing plot file %s", file_name.c_str());
+
+      this->WritePlotFile(file_name, "particles");
+    }
   };
 }; // class BaseParticlesContainer
 

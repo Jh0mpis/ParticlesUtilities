@@ -12,6 +12,8 @@
 #ifndef INITIALIZERS_H
 #define INITIALIZERS_H
 
+#include <cctk.h>
+
 #include "AMReX_Box.H"
 #include "AMReX_Config.H"
 #include "AMReX_MFIter.H"
@@ -20,7 +22,6 @@
 #include "AMReX_RandomEngine.H"
 #include "AMReX_Scan.H"
 #include <array>
-#include <cctk.h>
 #include <iostream>
 
 namespace Initializer {
@@ -413,9 +414,6 @@ void random_initializer(ParticleContainerClass &pc,
             arrdata[StructType::vy][pidx] = pt * sinth * sinph;
             arrdata[StructType::vz][pidx] = pt * costh;
 #endif
-
-            // std::cout << "# Particle t=0 " << p.id() << " (" << p.pos(0) << ", "
-            //           << p.pos(1) << ", " << p.pos(2) << ")" << std::endl;
 
             // Update the particles counter
             ++pidx;
