@@ -74,6 +74,14 @@ public:
     initializer_function(static_cast<OtherContainer &>(*this),
                          num_particles_per_cell, metric, level);
   };
+
+  template <typename Function>
+  void initialize(Function initializer_function,
+                  const int num_particles_per_container,
+                  const amrex::MultiFab &metric) {
+    initializer_function(static_cast<OtherContainer &>(*this),
+                         num_particles_per_container, metric);
+  };
   /**
    * The evolve method evolve the system given the differential equations and
    * the computed rhs.
