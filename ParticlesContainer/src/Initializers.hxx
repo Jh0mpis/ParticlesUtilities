@@ -300,8 +300,6 @@ void random_initializer(ParticleContainerClass &pc,
   const auto p_hi = pc.Geom(lev).ProbHiArray();
 
   amrex::MFIter mfi = pc.MakeMFIter(lev);
-  std::cout << "WHYYYYYYYYYYYY------------------------? " << mfi.isValid()
-            << std::endl;
 
   // Iterating over all the tiles of the particle data structure
   for (; mfi.isValid(); ++mfi) {

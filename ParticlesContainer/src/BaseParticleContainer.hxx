@@ -1,7 +1,7 @@
 /**
- * @file BaseParticlesContainer.hxx
+ * \file BaseParticleContainer.hxx
  *
- * @brief Contains the BaseParticlesContainer and ParticleIterator classes
+ * \brief Contains the BaseParticlesContainer and ParticleIterator classes
  * along with the BaseContainer and Iterator namespaces definition.
  *
  * This file contains the BaseParticlesContainer abstract class. This
@@ -29,6 +29,8 @@
 namespace BaseContainer {
 
 /**
+ * \brief BaseParticleContainer abstract class definition.
+ *
  * The BaseParticleContainer class is an abstract class that defines the methods
  * that have to be defined for the other <Particle>Containers derived classes.
  * This is templated on the new Container and the struct that defines the
@@ -53,6 +55,9 @@ public:
             amr_core) {}
 
   /**
+   * \brief Initialize the particles given a function with a tensor product of
+   * the number of particle per each cell direction..
+   *
    * The initialize method receives a function and use it to assign the initial
    * conditions over the particles. This function can be implemented by other
    * users.
@@ -67,6 +72,20 @@ public:
     initializer_function(static_cast<OtherContainer &>(*this), nppc);
   };
 
+  /**
+   * \brief Initialize the particles given a function with a fixed number of
+   * particles on each cell.
+   *
+   * The initialize method receives a function and use it to assign the initial
+   * conditions over the particles. This function can be implemented by other
+   * users.
+   * @param initializer_function Function that receives a BaseParticleContainer
+   * instance and a vector of size AMREX_SPACEDIM with the number of particles
+   * on each cell.
+   * @param num_particles_per_cell Number of particles on each cell.
+   * @param metric 3+1 ADM metric.
+   * @param level AMR level.
+   */
   template <typename Function>
   void initialize(Function initializer_function,
                   const int num_particles_per_cell,
@@ -75,6 +94,19 @@ public:
                          num_particles_per_cell, metric, level);
   };
 
+  /**
+   * \brief Initialize the particles given a function with a fixed number of
+   * particle on the container.
+   *
+   * The initialize method receives a function and use it to assign the initial
+   * conditions over the particles. This function can be implemented by other
+   * users.
+   * @param initializer_function Function that receives a BaseParticleContainer
+   * instance and a vector of size AMREX_SPACEDIM with the number of particles
+   * on each cell.
+   * @param num_particles_per_container Number of particles on the container.
+   * @param metric 3+1 ADM metric.
+   */
   template <typename Function>
   void initialize(Function initializer_function,
                   const int num_particles_per_container,
