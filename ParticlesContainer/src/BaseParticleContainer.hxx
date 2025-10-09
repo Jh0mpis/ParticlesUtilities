@@ -114,12 +114,23 @@ public:
     initializer_function(static_cast<OtherContainer &>(*this),
                          num_particles_per_container, metric);
   };
+
   /**
    * The evolve method evolve the system given the differential equations and
    * the computed rhs.
+   *
+   * @param lapse ADM lapse function
+   * @param shift ADM shift vector
+   * @param metric ADM induced metric
+   * @param curv ADM extrinsic curvature
+   * @param dt Time step
+   * @param lev AMR level
    */
-  virtual void evolve() = 0;
-  // virtual void computeRHS() = 0;
+  virtual void evolve(const amrex::MultiFab &lapse,
+                      const amrex::MultiFab &shift,
+                      const amrex::MultiFab &metric,
+                      const amrex::MultiFab &curv, const CCTK_REAL &dt,
+                      const int &lev) = 0;
 
   void outputParticlesAscii(CCTK_ARGUMENTS, const int &plot_every,
                             const std::string &out_dir) {
