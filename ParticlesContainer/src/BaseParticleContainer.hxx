@@ -54,6 +54,8 @@ public:
       : amrex::AmrParticleContainer<0, 0, StructType::n_attributes, 0>(
             amr_core) {}
 
+    virtual ~BaseParticleContainer() = default;
+
   /**
    * \brief Initialize the particles given a function with a tensor product of
    * the number of particle per each cell direction..
@@ -151,12 +153,13 @@ public:
     const int it = cctkGH->cctk_iteration;
     if (plot_every > 0 && it % plot_every == 0) {
       const std::string file_name =
-          out_dir + "/" + amrex::Concatenate("particles", it);
-      CCTK_VINFO(" Writing plot file %s", file_name.c_str());
+          out_dir + "/" + amrex::Concatenate("plt", it);
+      CCTK_VINFO("Writing plot file %s", file_name.c_str());
 
-      this->WritePlotFile(file_name, "particles");
+      this->WritePlotFile(file_name, this->name);
     }
   };
+
 }; // class BaseParticlesContainer
 
 } // namespace BaseContainer
