@@ -29,19 +29,17 @@ The project's files are distributed in the following way:
 
 ```bash
 ParticlesUtilities/
-├── ParticlesContainer/
+├── ParticlesContainer
 │   ├── configuration.ccl
-│   ├── doc/
 │   ├── interface.ccl
-│   ├── par/
-│   │   └── test.par
 │   ├── param.ccl
 │   ├── schedule.ccl
-│   └── src/
+│   └── src
 │       ├── BaseParticleContainer.hxx
 │       ├── Initializers.hxx
 │       ├── make.code.defn
 │       └── Particles.hxx
+├── docs/
 └── README.md
 ```
 
