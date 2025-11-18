@@ -54,72 +54,61 @@ public:
       : amrex::AmrParticleContainer<0, 0, StructType::n_attributes, 0>(
             amr_core) {}
 
-    virtual ~BaseParticleContainer() = default;
+  virtual ~BaseParticleContainer() = default;
 
   /**
-   * \brief Initialize the particles given a function with a tensor product of
-   * the number of particle per each cell direction..
+   * \brief Initialize the particles given a custom initialization function.
    *
    * The initialize method receives a function and use it to assign the initial
    * conditions over the particles. This function can be implemented by other
-   * users.
+   * users or use the ones defined in the file Initializers.hxx.
+   *
    * @param initializer_function Function that receives a BaseParticleContainer
-   * instance and a vector of size AMREX_SPACEDIM with the number of particles
-   * per direction on each cell.
-   * @param nppc Number of particles per direction on each cell.
+   * instance, one array full of doubles and another full of integers as
+   * parameters, how to use this parameters have to be defined inside of the
+   * custom function.
+   * @param real_params Double type array that contains the real parameters
+   * needed to initialize the particles.
+   * @param int_params Integer type array that contains the integer parameters
+   * needed to initialize the particles.
    */
   template <typename Function>
-  void initialize(Function initializer_function,
-                  const std::array<int, AMREX_SPACEDIM> nppc) {
-    initializer_function(static_cast<OtherContainer &>(*this), nppc);
+  void initialize(Function initializer_function, const CCTK_REAL *real_params,
+                  const CCTK_INT *int_params) {
+    initializer_function(static_cast<OtherContainer &>(*this), real_params,
+                         int_params);
   };
 
   /**
-   * \brief Initialize the particles given a function with a fixed number of
-   * particles on each cell.
+   * \brief Initialize the particles given a custom initialization function.
    *
    * The initialize method receives a function and use it to assign the initial
    * conditions over the particles. This function can be implemented by other
-   * users.
-   * @param initializer_function Function that receives a BaseParticleContainer
-   * instance and a vector of size AMREX_SPACEDIM with the number of particles
-   * on each cell.
-   * @param num_particles_per_cell Number of particles on each cell.
-   * @param metric 3+1 ADM metric.
-   * @param level AMR level.
-   */
-  template <typename Function>
-  void initialize(Function initializer_function,
-                  const int num_particles_per_cell,
-                  const amrex::MultiFab &metric, const int &level) {
-    initializer_function(static_cast<OtherContainer &>(*this),
-                         num_particles_per_cell, metric, level);
-  };
-
-  /**
-   * \brief Initialize the particles given a function with a fixed number of
-   * particle on the container.
+   * users or use the ones defined in the file Initializers.hxx.
    *
-   * The initialize method receives a function and use it to assign the initial
-   * conditions over the particles. This function can be implemented by other
-   * users.
    * @param initializer_function Function that receives a BaseParticleContainer
-   * instance and a vector of size AMREX_SPACEDIM with the number of particles
-   * on each cell.
-   * @param num_particles_per_container Number of particles on the container.
-   * @param metric 3+1 ADM metric.
+   * instance, one array full of doubles and another full of integers as
+   * parameters, how to use this parameters have to be defined inside of the
+   * custom function.
+   * @param metric 3D ADM Metric.
+   * @param level Current refinement level.
+   * @param real_params Double type array that contains the real parameters
+   * needed to initialize the particles.
+   * @param int_params Integer type array that contains the integer parameters
+   * needed to initialize the particles.
    */
   template <typename Function>
-  void initialize(Function initializer_function,
-                  const int num_particles_per_container,
-                  const amrex::MultiFab &metric) {
-    initializer_function(static_cast<OtherContainer &>(*this),
-                         num_particles_per_container, metric);
+  void initialize(Function initializer_function, const amrex::MultiFab &metric,
+                  const int &level, const CCTK_REAL *real_params,
+                  const CCTK_INT *int_params) {
+    initializer_function(static_cast<OtherContainer &>(*this), metric, level,
+                         real_params, int_params);
   };
 
   /**
-   * The evolve method evolve the system given the differential equations and
-   * the computed rhs.
+   * The evolve abstract method evolve the system given the differential
+   * equations and the computed rhs. Has to be override for each different type
+   * particle.
    *
    * @param lapse ADM lapse function
    * @param shift ADM shift vector
