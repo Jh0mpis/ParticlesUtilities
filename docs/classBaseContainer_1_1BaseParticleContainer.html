@@ -114,18 +114,16 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae92f3e7a22a89acec61478bacc19fa56"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#ae92f3e7a22a89acec61478bacc19fa56">BaseParticleContainer</a> (amrex::AmrCore *amr_core)</td></tr>
 <tr class="separator:ae92f3e7a22a89acec61478bacc19fa56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2de6254ad09f31cf746341957f6c8f1"><td class="memTemplParams" colspan="2">template&lt;typename Function &gt; </td></tr>
-<tr class="memitem:aa2de6254ad09f31cf746341957f6c8f1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#aa2de6254ad09f31cf746341957f6c8f1">initialize</a> (Function initializer_function, const std::array&lt; int, AMREX_SPACEDIM &gt; nppc)</td></tr>
-<tr class="memdesc:aa2de6254ad09f31cf746341957f6c8f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the particles given a function with a tensor product of the number of particle per each cell direction..  <a href="classBaseContainer_1_1BaseParticleContainer.html#aa2de6254ad09f31cf746341957f6c8f1">More...</a><br /></td></tr>
-<tr class="separator:aa2de6254ad09f31cf746341957f6c8f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedc73be5f3dbda852522444ff3f22f28"><td class="memTemplParams" colspan="2">template&lt;typename Function &gt; </td></tr>
-<tr class="memitem:aedc73be5f3dbda852522444ff3f22f28"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#aedc73be5f3dbda852522444ff3f22f28">initialize</a> (Function initializer_function, const int num_particles_per_cell, const amrex::MultiFab &amp;metric, const int &amp;level)</td></tr>
-<tr class="memdesc:aedc73be5f3dbda852522444ff3f22f28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the particles given a function with a fixed number of particles on each cell.  <a href="classBaseContainer_1_1BaseParticleContainer.html#aedc73be5f3dbda852522444ff3f22f28">More...</a><br /></td></tr>
-<tr class="separator:aedc73be5f3dbda852522444ff3f22f28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3044f57fb77b2ace819a5ac3cbc5f9f"><td class="memTemplParams" colspan="2">template&lt;typename Function &gt; </td></tr>
-<tr class="memitem:aa3044f57fb77b2ace819a5ac3cbc5f9f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#aa3044f57fb77b2ace819a5ac3cbc5f9f">initialize</a> (Function initializer_function, const int num_particles_per_container, const amrex::MultiFab &amp;metric)</td></tr>
-<tr class="memdesc:aa3044f57fb77b2ace819a5ac3cbc5f9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the particles given a function with a fixed number of particle on the container.  <a href="classBaseContainer_1_1BaseParticleContainer.html#aa3044f57fb77b2ace819a5ac3cbc5f9f">More...</a><br /></td></tr>
-<tr class="separator:aa3044f57fb77b2ace819a5ac3cbc5f9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a83c2fca6ee1849327e8c21f9c2bb81"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#a9a83c2fca6ee1849327e8c21f9c2bb81">~BaseParticleContainer</a> ()=default</td></tr>
+<tr class="separator:a9a83c2fca6ee1849327e8c21f9c2bb81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fb0fc1f29ce5dee8986f4f1c19335d4"><td class="memTemplParams" colspan="2">template&lt;typename Function &gt; </td></tr>
+<tr class="memitem:a5fb0fc1f29ce5dee8986f4f1c19335d4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#a5fb0fc1f29ce5dee8986f4f1c19335d4">initialize</a> (Function initializer_function, const CCTK_REAL *real_params, const CCTK_INT *int_params)</td></tr>
+<tr class="memdesc:a5fb0fc1f29ce5dee8986f4f1c19335d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the particles given a custom initialization function.  <a href="classBaseContainer_1_1BaseParticleContainer.html#a5fb0fc1f29ce5dee8986f4f1c19335d4">More...</a><br /></td></tr>
+<tr class="separator:a5fb0fc1f29ce5dee8986f4f1c19335d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65b46d091a12e2d729441e5cf1fe1717"><td class="memTemplParams" colspan="2">template&lt;typename Function &gt; </td></tr>
+<tr class="memitem:a65b46d091a12e2d729441e5cf1fe1717"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#a65b46d091a12e2d729441e5cf1fe1717">initialize</a> (Function initializer_function, const amrex::MultiFab &amp;metric, const int &amp;level, const CCTK_REAL *real_params, const CCTK_INT *int_params)</td></tr>
+<tr class="memdesc:a65b46d091a12e2d729441e5cf1fe1717"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the particles given a custom initialization function.  <a href="classBaseContainer_1_1BaseParticleContainer.html#a65b46d091a12e2d729441e5cf1fe1717">More...</a><br /></td></tr>
+<tr class="separator:a65b46d091a12e2d729441e5cf1fe1717"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1794da3c41c32037ed4c1df46ff71c2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#ae1794da3c41c32037ed4c1df46ff71c2">evolve</a> (const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev)=0</td></tr>
 <tr class="separator:ae1794da3c41c32037ed4c1df46ff71c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac38767d37232859c9425708deffc6563"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#ac38767d37232859c9425708deffc6563">outputParticlesAscii</a> (CCTK_ARGUMENTS, const int &amp;plot_every, const std::string &amp;out_dir)</td></tr>
@@ -179,6 +177,33 @@ template&lt;typename OtherContainer , typename StructType &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a9a83c2fca6ee1849327e8c21f9c2bb81" name="a9a83c2fca6ee1849327e8c21f9c2bb81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a83c2fca6ee1849327e8c21f9c2bb81">&#9670;&nbsp;</a></span>~BaseParticleContainer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename OtherContainer , typename StructType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer</a>&lt; OtherContainer, StructType &gt;::~<a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseParticleContainer</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -242,7 +267,7 @@ template&lt;typename OtherContainer , typename StructType &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >The evolve method evolve the system given the differential equations and the computed rhs.</p>
+<p >The evolve abstract method evolve the system given the differential equations and the computed rhs. Has to be override for each different type particle.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">lapse</td><td>ADM lapse function </td></tr>
@@ -257,8 +282,8 @@ template&lt;typename OtherContainer , typename StructType &gt; </div>
 
 </div>
 </div>
-<a id="aedc73be5f3dbda852522444ff3f22f28" name="aedc73be5f3dbda852522444ff3f22f28"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aedc73be5f3dbda852522444ff3f22f28">&#9670;&nbsp;</a></span>initialize() <span class="overload">[1/3]</span></h2>
+<a id="a65b46d091a12e2d729441e5cf1fe1717" name="a65b46d091a12e2d729441e5cf1fe1717"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65b46d091a12e2d729441e5cf1fe1717">&#9670;&nbsp;</a></span>initialize() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -275,12 +300,6 @@ template&lt;typename Function &gt; </div>
           <td>(</td>
           <td class="paramtype">Function&#160;</td>
           <td class="paramname"><em>initializer_function</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>num_particles_per_cell</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -292,7 +311,19 @@ template&lt;typename Function &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>level</em>&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL *&#160;</td>
+          <td class="paramname"><em>real_params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_INT *&#160;</td>
+          <td class="paramname"><em>int_params</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -307,21 +338,23 @@ template&lt;typename Function &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Initialize the particles given a function with a fixed number of particles on each cell. </p>
-<p >The initialize method receives a function and use it to assign the initial conditions over the particles. This function can be implemented by other users. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Initialize the particles given a custom initialization function. </p>
+<p >The initialize method receives a function and use it to assign the initial conditions over the particles. This function can be implemented by other users or use the ones defined in the file <a class="el" href="Initializers_8hxx.html" title="Includes some Initializers functions useful for different initial conditions.">Initializers.hxx</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">initializer_function</td><td>Function that receives a <a class="el" href="classBaseContainer_1_1BaseParticleContainer.html" title="BaseParticleContainer abstract class definition.">BaseParticleContainer</a> instance and a vector of size AMREX_SPACEDIM with the number of particles on each cell. </td></tr>
-    <tr><td class="paramname">num_particles_per_cell</td><td>Number of particles on each cell. </td></tr>
-    <tr><td class="paramname">metric</td><td>3+1 ADM metric. </td></tr>
-    <tr><td class="paramname">level</td><td>AMR level. </td></tr>
+    <tr><td class="paramname">initializer_function</td><td>Function that receives a <a class="el" href="classBaseContainer_1_1BaseParticleContainer.html" title="BaseParticleContainer abstract class definition.">BaseParticleContainer</a> instance, one array full of doubles and another full of integers as parameters, how to use this parameters have to be defined inside of the custom function. </td></tr>
+    <tr><td class="paramname">metric</td><td>3D ADM Metric. </td></tr>
+    <tr><td class="paramname">level</td><td>Current refinement level. </td></tr>
+    <tr><td class="paramname">real_params</td><td>Double type array that contains the real parameters needed to initialize the particles. </td></tr>
+    <tr><td class="paramname">int_params</td><td>Integer type array that contains the integer parameters needed to initialize the particles. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="aa3044f57fb77b2ace819a5ac3cbc5f9f" name="aa3044f57fb77b2ace819a5ac3cbc5f9f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3044f57fb77b2ace819a5ac3cbc5f9f">&#9670;&nbsp;</a></span>initialize() <span class="overload">[2/3]</span></h2>
+<a id="a5fb0fc1f29ce5dee8986f4f1c19335d4" name="a5fb0fc1f29ce5dee8986f4f1c19335d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fb0fc1f29ce5dee8986f4f1c19335d4">&#9670;&nbsp;</a></span>initialize() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -342,14 +375,14 @@ template&lt;typename Function &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>num_particles_per_container</em>, </td>
+          <td class="paramtype">const CCTK_REAL *&#160;</td>
+          <td class="paramname"><em>real_params</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const amrex::MultiFab &amp;&#160;</td>
-          <td class="paramname"><em>metric</em>&#160;</td>
+          <td class="paramtype">const CCTK_INT *&#160;</td>
+          <td class="paramname"><em>int_params</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -364,61 +397,13 @@ template&lt;typename Function &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Initialize the particles given a function with a fixed number of particle on the container. </p>
-<p >The initialize method receives a function and use it to assign the initial conditions over the particles. This function can be implemented by other users. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Initialize the particles given a custom initialization function. </p>
+<p >The initialize method receives a function and use it to assign the initial conditions over the particles. This function can be implemented by other users or use the ones defined in the file <a class="el" href="Initializers_8hxx.html" title="Includes some Initializers functions useful for different initial conditions.">Initializers.hxx</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">initializer_function</td><td>Function that receives a <a class="el" href="classBaseContainer_1_1BaseParticleContainer.html" title="BaseParticleContainer abstract class definition.">BaseParticleContainer</a> instance and a vector of size AMREX_SPACEDIM with the number of particles on each cell. </td></tr>
-    <tr><td class="paramname">num_particles_per_container</td><td>Number of particles on the container. </td></tr>
-    <tr><td class="paramname">metric</td><td>3+1 ADM metric. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="aa2de6254ad09f31cf746341957f6c8f1" name="aa2de6254ad09f31cf746341957f6c8f1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2de6254ad09f31cf746341957f6c8f1">&#9670;&nbsp;</a></span>initialize() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename OtherContainer , typename StructType &gt; </div>
-<div class="memtemplate">
-template&lt;typename Function &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer</a>&lt; OtherContainer, StructType &gt;::initialize </td>
-          <td>(</td>
-          <td class="paramtype">Function&#160;</td>
-          <td class="paramname"><em>initializer_function</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::array&lt; int, AMREX_SPACEDIM &gt;&#160;</td>
-          <td class="paramname"><em>nppc</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Initialize the particles given a function with a tensor product of the number of particle per each cell direction.. </p>
-<p >The initialize method receives a function and use it to assign the initial conditions over the particles. This function can be implemented by other users. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">initializer_function</td><td>Function that receives a <a class="el" href="classBaseContainer_1_1BaseParticleContainer.html" title="BaseParticleContainer abstract class definition.">BaseParticleContainer</a> instance and a vector of size AMREX_SPACEDIM with the number of particles per direction on each cell. </td></tr>
-    <tr><td class="paramname">nppc</td><td>Number of particles per direction on each cell. </td></tr>
+    <tr><td class="paramname">initializer_function</td><td>Function that receives a <a class="el" href="classBaseContainer_1_1BaseParticleContainer.html" title="BaseParticleContainer abstract class definition.">BaseParticleContainer</a> instance, one array full of doubles and another full of integers as parameters, how to use this parameters have to be defined inside of the custom function. </td></tr>
+    <tr><td class="paramname">real_params</td><td>Double type array that contains the real parameters needed to initialize the particles. </td></tr>
+    <tr><td class="paramname">int_params</td><td>Integer type array that contains the integer parameters needed to initialize the particles. </td></tr>
   </table>
   </dd>
 </dl>
