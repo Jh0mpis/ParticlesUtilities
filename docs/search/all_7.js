@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['particleiterator_0',['ParticleIterator',['../classIterator_1_1ParticleIterator.html',1,'Iterator']]],
-  ['particles_1',['Particles',['../namespaceParticles.html',1,'']]],
-  ['particles_20utilities_2',['Particles Utilities',['../index.html',1,'']]],
-  ['particles_2ehxx_3',['Particles.hxx',['../Particles_8hxx.html',1,'']]],
-  ['photonsdata_4',['PhotonsData',['../structParticles_1_1PhotonsData.html',1,'Particles']]]
+  ['outputparticlesascii_0',['outputParticlesAscii',['../classBaseContainer_1_1BaseParticleContainer.html#ac38767d37232859c9425708deffc6563',1,'BaseContainer::BaseParticleContainer']]],
+  ['outputparticlesplot_1',['outputParticlesPlot',['../classBaseContainer_1_1BaseParticleContainer.html#a678945be19c19c9f15fbe27fa36e3291',1,'BaseContainer::BaseParticleContainer']]]
 ];

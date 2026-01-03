@@ -126,6 +126,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a65b46d091a12e2d729441e5cf1fe1717"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1794da3c41c32037ed4c1df46ff71c2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#ae1794da3c41c32037ed4c1df46ff71c2">evolve</a> (const amrex::MultiFab &amp;lapse, const amrex::MultiFab &amp;shift, const amrex::MultiFab &amp;metric, const amrex::MultiFab &amp;curv, const CCTK_REAL &amp;dt, const int &amp;lev)=0</td></tr>
 <tr class="separator:ae1794da3c41c32037ed4c1df46ff71c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c541ed93526cab251ad0a140cbbb67f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#a5c541ed93526cab251ad0a140cbbb67f">check_banned_zones</a> (const int &amp;level, const CCTK_INT4 &amp;zones, const CCTK_REAL(&amp;x)[10], const CCTK_REAL(&amp;y)[10], const CCTK_REAL(&amp;z)[10], const CCTK_REAL(&amp;radius)[10])</td></tr>
+<tr class="separator:a5c541ed93526cab251ad0a140cbbb67f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac38767d37232859c9425708deffc6563"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#ac38767d37232859c9425708deffc6563">outputParticlesAscii</a> (CCTK_ARGUMENTS, const int &amp;plot_every, const std::string &amp;out_dir)</td></tr>
 <tr class="separator:ac38767d37232859c9425708deffc6563"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a678945be19c19c9f15fbe27fa36e3291"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseContainer_1_1BaseParticleContainer.html#a678945be19c19c9f15fbe27fa36e3291">outputParticlesPlot</a> (CCTK_ARGUMENTS, const int &amp;plot_every, const std::string &amp;out_dir)</td></tr>
@@ -208,6 +210,80 @@ template&lt;typename OtherContainer , typename StructType &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5c541ed93526cab251ad0a140cbbb67f" name="a5c541ed93526cab251ad0a140cbbb67f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c541ed93526cab251ad0a140cbbb67f">&#9670;&nbsp;</a></span>check_banned_zones()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename OtherContainer , typename StructType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classBaseContainer_1_1BaseParticleContainer.html">BaseContainer::BaseParticleContainer</a>&lt; OtherContainer, StructType &gt;::check_banned_zones </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_INT4 &amp;&#160;</td>
+          <td class="paramname"><em>zones</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL(&amp;)&#160;</td>
+          <td class="paramname"><em>x</em>[10], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL(&amp;)&#160;</td>
+          <td class="paramname"><em>y</em>[10], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL(&amp;)&#160;</td>
+          <td class="paramname"><em>z</em>[10], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CCTK_REAL(&amp;)&#160;</td>
+          <td class="paramname"><em>radius</em>[10]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >The check banned zones function check for user defined invalid particles zones.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">level</td><td>Adaptive Mesh Refinement level </td></tr>
+    <tr><td class="paramname">zones</td><td>Number of banned zones </td></tr>
+    <tr><td class="paramname">x</td><td>x-coordinates array for each region </td></tr>
+    <tr><td class="paramname">y</td><td>y-coordinates array for each region </td></tr>
+    <tr><td class="paramname">z</td><td>z-coordinates array for each region </td></tr>
+    <tr><td class="paramname">radius</td><td>Radius array for each region </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ae1794da3c41c32037ed4c1df46ff71c2" name="ae1794da3c41c32037ed4c1df46ff71c2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae1794da3c41c32037ed4c1df46ff71c2">&#9670;&nbsp;</a></span>evolve()</h2>
 

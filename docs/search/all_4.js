@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['m_0',['m',['../structParticles_1_1MassiveParticleData.html#a7af677b4265b2cea89c05f41c08617e8a0a5884df06705f27b61fbc6078ffac92',1,'Particles::MassiveParticleData']]],
-  ['massiveparticledata_1',['MassiveParticleData',['../structParticles_1_1MassiveParticleData.html',1,'Particles']]]
+  ['initialize_0',['initialize',['../classBaseContainer_1_1BaseParticleContainer.html#a5fb0fc1f29ce5dee8986f4f1c19335d4',1,'BaseContainer::BaseParticleContainer::initialize(Function initializer_function, const CCTK_REAL *real_params, const CCTK_INT *int_params)'],['../classBaseContainer_1_1BaseParticleContainer.html#a65b46d091a12e2d729441e5cf1fe1717',1,'BaseContainer::BaseParticleContainer::initialize(Function initializer_function, const amrex::MultiFab &amp;metric, const int &amp;level, const CCTK_REAL *real_params, const CCTK_INT *int_params)']]],
+  ['initializer_1',['Initializer',['../namespaceInitializer.html',1,'']]],
+  ['initializers_2ehxx_2',['Initializers.hxx',['../Initializers_8hxx.html',1,'']]],
+  ['iterator_3',['Iterator',['../namespaceIterator.html',1,'']]]
 ];

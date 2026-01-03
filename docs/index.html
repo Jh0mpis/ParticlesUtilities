@@ -82,6 +82,19 @@ Index</h1>
 </ul>
 </li>
 <li>Files structure</li>
+<li>Dependencies</li>
+<li>Additional thorn features<ul>
+<li>Banned zones check</li>
+<li>Metric Initialization</li>
+</ul>
+</li>
+<li>Parameters file<ul>
+<li>Output parameters</li>
+<li>Banned regions parameters</li>
+<li>Metric initialization parameters</li>
+</ul>
+</li>
+<li>Include it into your project</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Particles Utilities interface</h1>
@@ -100,19 +113,104 @@ Files structure</h1>
 <div class="fragment"><div class="line">ParticlesUtilities/</div>
 <div class="line">├── ParticlesContainer/</div>
 <div class="line">│   ├── configuration.ccl</div>
-<div class="line">│   ├── doc/</div>
 <div class="line">│   ├── interface.ccl</div>
-<div class="line">│   ├── par/</div>
-<div class="line">│   │   └── test.par</div>
 <div class="line">│   ├── param.ccl</div>
 <div class="line">│   ├── schedule.ccl</div>
 <div class="line">│   └── src/</div>
 <div class="line">│       ├── BaseParticleContainer.hxx</div>
 <div class="line">│       ├── Initializers.hxx</div>
 <div class="line">│       ├── make.code.defn</div>
+<div class="line">│       ├── metrics.cxx</div>
 <div class="line">│       └── Particles.hxx</div>
+<div class="line">├── docs/</div>
 <div class="line">└── README.md</div>
-</div><!-- fragment --> </div></div><!-- PageDoc -->
+</div><!-- fragment --><p >Where the <code>docs</code> folder contains the html documentation of the project.</p>
+<p >All the <code>BaseParticleContainer</code> and the iterator definitions are contained at the <code><a class="el" href="BaseParticleContainer_8hxx.html" title="Contains the BaseParticlesContainer and ParticleIterator classes along with the BaseContainer and Ite...">BaseParticleContainer.hxx</a></code> file. The metrics implementations are defined inside of the <code><a class="el" href="metrics_8cxx.html" title="Available metrics functions to initialize.">metrics.cxx</a></code> file.</p>
+<h1><a class="anchor" id="autotoc_md5"></a>
+Dependencies</h1>
+<p >In order to use this thorn you need to have compiled the following thorns:</p>
+<ol type="1">
+<li>AMReX</li>
+</ol>
+<ol type="1">
+<li>NSIMD</li>
+</ol>
+<ol type="1">
+<li>CarpetX/Loop</li>
+</ol>
+<p >and its requirements.</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
+Additional thorn features</h1>
+<p >The thorn also includes some extra features that can be common for all the derived particles.</p>
+<h2><a class="anchor" id="autotoc_md7"></a>
+Banned zones check</h2>
+<p >Given some metric, we could find some regions were the geodesics evolution have no sense or could reach to mathematical and computing singularities. For this reason the thorn implements parameters that allows to check if the particles are crossing the banned regions. This parameters allows the user to check up to 10 different regions by specifying the $x, y, z$ coordinates and a radius. The program is going to delete the particles that enter in that 3D sphere.</p>
+<p >This is managed by the parameters <code>banned_regions</code>, <code>region_&lt;n&gt;_position</code> and <code>region_&lt;n&gt;_radius</code> variables, where n goes from 1 to 10.</p>
+<h2><a class="anchor" id="autotoc_md8"></a>
+Metric Initialization</h2>
+<p >This thorn also provides some useful implementations, such as the initialization of some space time metrics using the ADM formalism, the current implemented metrics are:</p>
+<ul>
+<li>Cartesian Minkowski.</li>
+<li>Schwarzschild in Isotropic coordinates.</li>
+<li>Schwarzschild in Schwarzschild coordinates transformed into cartesian coordinates.</li>
+<li>Kerr-Shild metric using cartesian coordinates.</li>
+</ul>
+<p >This is managed through the parameters <code>metric</code> to define the metric type and the parameters <code>metric_params_i</code> and <code>metric_params_d</code> used for the metric parameters needed.</p>
+<h1><a class="anchor" id="autotoc_md9"></a>
+Parameters file</h1>
+<p >The thorns contains the following parameters:</p>
+<h2><a class="anchor" id="autotoc_md10"></a>
+Output parameters</h2>
+<p >The thorn has the following parameters for the data output:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Range   </th><th class="markdownTableHeadNone">Default    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">particle_plot_every   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">The number of step where the simulation should print the particles data using amrex print utilities.   </td><td class="markdownTableBodyNone">[0, $\infty$) 0 means no print   </td><td class="markdownTableBodyNone">0    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">particle_tsv_every   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">The number of step where the simulation should print the particles data using ascii.   </td><td class="markdownTableBodyNone">[0, $\infty$) 0 means no print   </td><td class="markdownTableBodyNone">0   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md11"></a>
+Banned regions parameters</h2>
+<p >In order to manage the banned regions check, the thorn has defined the following parameters:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Range   </th><th class="markdownTableHeadNone">Default    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">banned_regions   </td><td class="markdownTableBodyNone">INTEGER   </td><td class="markdownTableBodyNone">Number of banned regions for the simulation.   </td><td class="markdownTableBodyNone">[0, 10]   </td><td class="markdownTableBodyNone">0    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">region_&lt;n&gt;_position   </td><td class="markdownTableBodyNone">REAL[3]   </td><td class="markdownTableBodyNone">Size 3 array containing the coordinates of the banned region center.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">region_&lt;n&gt;_radius   </td><td class="markdownTableBodyNone">REAL   </td><td class="markdownTableBodyNone">Banned region's radius.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md12"></a>
+Metric initialization parameters</h2>
+<p >For the metric parameters we have the following ones:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Range   </th><th class="markdownTableHeadNone">Default    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">metric   </td><td class="markdownTableBodyNone">KEYWORD   </td><td class="markdownTableBodyNone">Keyword for the type of metric the user wants to initialize.   </td><td class="markdownTableBodyNone">"Minkowski", "Isotropic Schwarzschild", "Schwarzschild", "Kerr-Shild", "none"   </td><td class="markdownTableBodyNone">none    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">metric_params_d   </td><td class="markdownTableBodyNone">REAL[10]   </td><td class="markdownTableBodyNone">double type parameters needed to pass to the metric <a class="el" href="namespaceInitializer.html">Initializer</a>.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0.0    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">metric_params_i   </td><td class="markdownTableBodyNone">INTEGER[10]   </td><td class="markdownTableBodyNone">integer type parameters needed to pass to the metric <a class="el" href="namespaceInitializer.html">Initializer</a>.   </td><td class="markdownTableBodyNone">any   </td><td class="markdownTableBodyNone">0   </td></tr>
+</table>
+<h1><a class="anchor" id="autotoc_md13"></a>
+Include it into your project</h1>
+<p >You could add this thorn to your project by adding the following lines to your EinsteinToolkit thornlist:</p>
+<div class="fragment"><div class="line"># PUInX</div>
+<div class="line">!TARGET   = $ARR</div>
+<div class="line">!TYPE     = git</div>
+<div class="line">!URL      = https://github.com/Jh0mpis/ParticlesUtilities.git</div>
+<div class="line">!REPO_BRANCH = dev</div>
+<div class="line">!REPO_PATH = $2</div>
+<div class="line">!CHECKOUT =</div>
+<div class="line">ParticlesUtilities/ParticlesContainer</div>
+</div><!-- fragment --><p >and then you can execute the EinsteinToolkit re-build command that you usually use, for instance:</p>
+<div class="fragment"><div class="line">./simfactory/bin/sim build -j4 ...</div>
+</div><!-- fragment --><p >This thorn is an abstract implementation for other thorns, so even after you code compiles, this thorn have to do nothing. Other thorns are going to be the ones that add particles to your simulation. </p>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

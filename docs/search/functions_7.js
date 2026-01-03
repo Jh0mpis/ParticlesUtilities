@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7ebaseparticlecontainer_0',['~BaseParticleContainer',['../classBaseContainer_1_1BaseParticleContainer.html#a9a83c2fca6ee1849327e8c21f9c2bb81',1,'BaseContainer::BaseParticleContainer']]]
+  ['random_5finitializer_0',['random_initializer',['../namespaceInitializer.html#a9a02ab756ad9effa2005b18097b3aacf',1,'Initializer']]]
 ];

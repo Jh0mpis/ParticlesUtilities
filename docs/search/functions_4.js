@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['outputparticlesascii_0',['outputParticlesAscii',['../classBaseContainer_1_1BaseParticleContainer.html#ac38767d37232859c9425708deffc6563',1,'BaseContainer::BaseParticleContainer']]],
-  ['outputparticlesplot_1',['outputParticlesPlot',['../classBaseContainer_1_1BaseParticleContainer.html#a678945be19c19c9f15fbe27fa36e3291',1,'BaseContainer::BaseParticleContainer']]]
+  ['initialize_0',['initialize',['../classBaseContainer_1_1BaseParticleContainer.html#a5fb0fc1f29ce5dee8986f4f1c19335d4',1,'BaseContainer::BaseParticleContainer::initialize(Function initializer_function, const CCTK_REAL *real_params, const CCTK_INT *int_params)'],['../classBaseContainer_1_1BaseParticleContainer.html#a65b46d091a12e2d729441e5cf1fe1717',1,'BaseContainer::BaseParticleContainer::initialize(Function initializer_function, const amrex::MultiFab &amp;metric, const int &amp;level, const CCTK_REAL *real_params, const CCTK_INT *int_params)']]]
 ];
