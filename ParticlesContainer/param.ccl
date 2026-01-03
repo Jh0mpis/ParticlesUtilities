@@ -14,7 +14,7 @@ RESTRICTED: INT particle_tsv_every "Output in TSV format every that many iterati
 
 # Banned regions parameters
 
-RESTRICTED: INT banned_regions "Number of banned regions for each particle type" STEERABLE=always
+RESTRICTED: INT banned_regions "Number of banned regions." STEERABLE=always
 {
     0:10 :: "Up to 10 different regions"
 } 0
@@ -134,7 +134,7 @@ KEYWORD metric "metric to initialize" {
     "Minkowski" :: "Minkowski metric"
     "Isotropic Schwarzschild" :: "Schwarzswchild metric in Isotropic coordinates"
     "Schwarzschild" :: "Schwarzswchild metric"
-    "Kerr-Shild" :: "Isotropic Schwarzswchild metric"
+    "Kerr-Shild" :: "Kerr-Shild metric"
     "none" :: "Not initialize using a metric"
 } "none" 
 
