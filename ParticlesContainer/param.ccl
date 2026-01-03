@@ -12,6 +12,141 @@ RESTRICTED: INT particle_tsv_every "Output in TSV format every that many iterati
   1:* :: "every that many iterations"
 } 0
 
+# Banned regions parameters
+
+RESTRICTED: INT banned_regions "Number of banned regions for each particle type" STEERABLE=always
+{
+    0:10 :: "Up to 10 different regions"
+} 0
+
+## Region 1
+RESTRICTED: REAL region_1_position[3] "Coordinates of the region 1" STEERABLE=always
+{
+    *:* :: "Any value inside the Simulation domain"
+} 0.0
+
+RESTRICTED: REAL region_1_radius "" STEERABLE=always
+{
+    0:* :: "Any positive value"
+} 0.0
+
+## Region 2
+RESTRICTED: REAL region_2_position[3] "Coordinates of the region 2" STEERABLE=always
+{
+    *:* :: "Any value inside the Simulation domain"
+} 0.0
+
+RESTRICTED: REAL region_2_radius "Radius of the region 2" STEERABLE=always
+{
+    0:* :: "Any positive value"
+} 0.0
+
+## Region 3
+RESTRICTED: REAL region_3_position[3] "Coordinates of the region 3" STEERABLE=always
+{
+    *:* :: "Any value inside the Simulation domain"
+} 0.0
+
+RESTRICTED: REAL region_3_radius "Radius of the region 3" STEERABLE=always
+{
+    0:* :: "Any positive value"
+} 0.0
+
+## Region 4
+RESTRICTED: REAL region_4_position[3] "Coordinates of the region 4" STEERABLE=always
+{
+    *:* :: "Any value inside the Simulation domain"
+} 0.0
+
+RESTRICTED: REAL region_4_radius "Radius of the region 4" STEERABLE=always
+{
+    0:* :: "Any positive value"
+} 0.0
+
+## Region 5
+RESTRICTED: REAL region_5_position[3] "Coordinates of the region 5" STEERABLE=always
+{
+    *:* :: "Any value inside the Simulation domain"
+} 0.0
+
+RESTRICTED: REAL region_5_radius "Radius of the region 5" STEERABLE=always
+{
+    0:* :: "Any positive value"
+} 0.0
+
+## Region 6
+RESTRICTED: REAL region_6_position[3] "Coordinates of the region 6" STEERABLE=always
+{
+    *:* :: "Any value inside the Simulation domain"
+} 0.0
+
+RESTRICTED: REAL region_6_radius "Radius of the region 6" STEERABLE=always
+{
+    0:* :: "Any positive value"
+} 0.0
+
+## Region 7
+RESTRICTED: REAL region_7_position[3] "Coordinates of the region 7" STEERABLE=always
+{
+    *:* :: "Any value inside the Simulation domain"
+} 0.0
+
+RESTRICTED: REAL region_7_radius "Radius of the region 7" STEERABLE=always
+{
+    0:* :: "Any positive value"
+} 0.0
+
+## Region 8
+RESTRICTED: REAL region_8_position[3] "Coordinates of the region 8" STEERABLE=always
+{
+    *:* :: "Any value inside the Simulation domain"
+} 0.0
+
+RESTRICTED: REAL region_8_radius "Radius of the region 8" STEERABLE=always
+{
+    0:* :: "Any positive value"
+} 0.0
+
+## Region 9
+RESTRICTED: REAL region_9_position[3] "Coordinates of the region 9" STEERABLE=always
+{
+    *:* :: "Any value inside the Simulation domain"
+} 0.0
+
+RESTRICTED: REAL region_9_radius "Radius of the region 9" STEERABLE=always
+{
+    0:* :: "Any positive value"
+} 0.0
+
+## Region 10
+RESTRICTED: REAL region_10_position[3] "Coordinates of the region 10" STEERABLE=always
+{
+    *:* :: "Any value inside the Simulation domain"
+} 0.0
+
+RESTRICTED: REAL region_10_radius "Radius of the region 10" STEERABLE=always
+{
+    0:* :: "Any positive value"
+} 0.0
+
+# Metrics parameters
+KEYWORD metric "metric to initialize" {
+    "Minkowski" :: "Minkowski metric"
+    "Isotropic Schwarzschild" :: "Schwarzswchild metric in Isotropic coordinates"
+    "Schwarzschild" :: "Schwarzswchild metric"
+    "Kerr-Shild" :: "Isotropic Schwarzswchild metric"
+    "none" :: "Not initialize using a metric"
+} "none" 
+
+REAL metric_params_d[10] "double type parameters needed to pass to the metric initializer" {
+    *:* :: ""
+} 0.0
+
+REAL metric_params_i[10]  "int type parameters needed to pass to the metric initializer" {
+    *:* :: ""
+} 0
+
+
 SHARES: IO
 
 USES STRING filereader_ID_dir

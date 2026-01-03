@@ -15,6 +15,7 @@
 #define BASEPARTICLESCONTAINER_HXX
 
 // Include libraries
+#include "AMReX_CTOParallelForImpl.H"
 #include <cctk.h>
 
 #include <AMReX_AmrParticles.H>
@@ -22,10 +23,37 @@
 #include <cctk_Arguments.h>
 #include <cctk_Parameters.h>
 #include <cctk_core.h>
-#include <iostream>
 #include <string>
 
-// Starting the namespace
+namespace Iterator {
+
+template <typename StructType>
+class ParticleIterator
+    : public amrex::ParIter<0, 0, StructType::n_attributes, 0> {
+public:
+  using amrex::ParIter<0, 0, StructType::n_attributes, 0>::ParIter;
+  using RealVector = typename amrex::ParIter<
+      0, 0, StructType::n_attributes>::ContainerType::RealVector;
+
+  const std::array<RealVector, StructType::n_attributes> &GetAttribs() const {
+    return this->GetStructOfArrays().GetRealData();
+  }
+
+  std::array<RealVector, StructType::n_attributes> &GetAttributes() {
+    return this->GetStructOfArrays().GetRealData();
+  }
+
+  const RealVector &GetAttribs(int comp) const {
+    return this->GetStructOfArrays().GetRealData(comp);
+  }
+
+  RealVector &GetAttributes(int comp) {
+    return this->GetStructOfArrays().GetRealData(comp);
+  }
+}; // class ParicleIterator
+
+} // namespace Iterator
+
 namespace BaseContainer {
 
 /**
@@ -123,6 +151,49 @@ public:
                       const amrex::MultiFab &curv, const CCTK_REAL &dt,
                       const int &lev) = 0;
 
+  /**
+   * The check banned zones function check for user defined invalid particles
+   * zones.
+   *
+   * @param level Adaptive Mesh Refinement level
+   * @param zones Number of banned zones
+   * @param x x-coordinates array for each region
+   * @param y y-coordinates array for each region
+   * @param z z-coordinates array for each region
+   * @param radius Radius array for each region
+   */
+  void check_banned_zones(const int &level, const CCTK_INT4 &zones,
+                          const CCTK_REAL (&x)[10], const CCTK_REAL (&y)[10],
+                          const CCTK_REAL (&z)[10],
+                          const CCTK_REAL (&radius)[10]) {
+
+    if (!zones) {
+      return;
+    }
+
+    for (Iterator::ParticleIterator<StructType> pti(*this, level);
+         pti.isValid(); ++pti) {
+      const int np = pti.numParticles();
+      auto *AMREX_RESTRICT particles = &(pti.GetArrayOfStructs()[0]);
+
+      auto self = this;
+      amrex::ParallelFor(np, [=] AMREX_GPU_DEVICE(int i) noexcept {
+        bool out = false;
+        for (int check = 0; check < zones; check++) {
+          const CCTK_REAL dx = particles[i].pos(0) - x[check];
+          const CCTK_REAL dy = particles[i].pos(1) - y[check];
+          const CCTK_REAL dz = particles[i].pos(2) - z[check];
+          out |= (dx * dx + dy * dy + dz * dz <= radius[check] * radius[check]);
+        }
+
+        if (out) {
+          particles[i].id() = -1;
+          return;
+        }
+      });
+    }
+  }
+
   void outputParticlesAscii(CCTK_ARGUMENTS, const int &plot_every,
                             const std::string &out_dir) {
 
@@ -152,34 +223,5 @@ public:
 }; // class BaseParticlesContainer
 
 } // namespace BaseContainer
-
-namespace Iterator {
-
-template <typename StructType>
-class ParticleIterator
-    : public amrex::ParIter<0, 0, StructType::n_attributes, 0> {
-public:
-  using amrex::ParIter<0, 0, StructType::n_attributes, 0>::ParIter;
-  using RealVector = typename amrex::ParIter<
-      0, 0, StructType::n_attributes>::ContainerType::RealVector;
-
-  const std::array<RealVector, StructType::n_attributes> &GetAttribs() const {
-    return this->GetStructOfArrays().GetRealData();
-  }
-
-  std::array<RealVector, StructType::n_attributes> &GetAttributes() {
-    return this->GetStructOfArrays().GetRealData();
-  }
-
-  const RealVector &GetAttribs(int comp) const {
-    return this->GetStructOfArrays().GetRealData(comp);
-  }
-
-  RealVector &GetAttributes(int comp) {
-    return this->GetStructOfArrays().GetRealData(comp);
-  }
-}; // class ParicleIterator
-
-} // namespace Iterator
 
 #endif // !BASEPARTICLESCONTAINER_HXX
