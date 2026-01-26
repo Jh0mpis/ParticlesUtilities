@@ -182,7 +182,7 @@ extern "C" void ParticlesContainer_init_metric(CCTK_ARGUMENTS) {
     grid.loop_all_device<0, 0, 0>(
         grid.nghostzones,
         [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
-          CCTK_REAL r_2 = (p.x * p.x + p.y * p.y + p.z * p.z - a * a) / 2.0;
+          const CCTK_REAL r_2 = (p.x * p.x + p.y * p.y + p.z * p.z - a * a) / 2.0;
           CCTK_REAL r2 = r_2 + sqrt(r_2 * r_2 + a * a * p.z * p.z);
 
           if (r2 < 0) {
@@ -236,13 +236,13 @@ extern "C" void ParticlesContainer_init_metric(CCTK_ARGUMENTS) {
             const CCTK_REAL dr[3] = {
                 (p.x + ((R - a * a) * p.x) /
                            (2. * std::sqrt((R - a * a) * (R - a * a) / 4. +
-                                           a * a * p.z * p.z))) /(2. * r),
+                                           a * a * p.z * p.z))) / (2. * r),
                 (p.y + ((R - a * a) * p.y) /
                            (2. * std::sqrt((R - a * a) * (R - a * a) / 4. +
-                                           a * a * p.z * p.z)))/(2. * r),
-                (p.z + ((R - a * a) * p.z+2.*a*a*p.z) /
+                                           a * a * p.z * p.z))) / (2. * r),
+                (p.z + ((R - a * a) * p.z + 2. * a * a * p.z) /
                            (2. * std::sqrt((R - a * a) * (R - a * a) / 4. +
-                                           a * a * p.z * p.z)))/(2. * r)
+                                           a * a * p.z * p.z))) / (2. * r)
             };
 
             const CCTK_REAL df[3] = {
@@ -253,26 +253,26 @@ extern "C" void ParticlesContainer_init_metric(CCTK_ARGUMENTS) {
                     ((r2 * r2 + a * a * p.z * p.z) *
                      (r2 * r2 + a * a * p.z * p.z)),
                 -(2. * m * r2 * ((r2 * r2 - 3. * a * a * p.z * p.z) * dr[2] +
-                  2. * a * a * p.z * r2 * r)) /
+                  2. * a * a * p.z * r)) /
                     ((r2 * r2 + a * a * p.z * p.z) *
                      (r2 * r2 + a * a * p.z * p.z))};
 
-
             const CCTK_REAL dl[3][3] = {
-                {(p.x*dr[0] + r) / (r2+a*a) - 2.*r*(r*p.x+a*p.y) * dr[0] / ((r2+a*a)*(r2+a*a)),
+                {(p.x * dr[0] + r) / (r2+a*a) - 2.*r*(r*p.x+a*p.y) * dr[0] / ((r2+a*a)*(r2+a*a)),
                  (p.y * dr[0] - a) / (r2 + a * a) -
                      (2 * r * (p.y * r - a * p.x) * dr[0]) /
                          ((r2 + a * a) * (r2 + a * a)),
                  -p.z * dr[0] / r2},
-                {(p.x*dr[1] + a) / (r2+a*a) - 2.*r*(r*p.x+a*p.y) * dr[1] / ((r2+a*a)*(r2+a*a)),
+                {(p.x * dr[1] + a) / (r2+a*a) - 2.*r*(r*p.x+a*p.y) * dr[1] / ((r2+a*a)*(r2+a*a)),
                  (p.y * dr[1] + r) / (r2 + a * a) -
                      (2. * r * (p.y * r - a * p.x) * dr[1]) /
                          ((r2 + a * a) * (r2 + a * a)),
                  -p.z * dr[1] / r2},
-                {(p.x*dr[2]) / (r2+a*a) - 2.*r*(r*p.x+a*p.y) * dr[2] / ((r2+a*a)*(r2+a*a)),
-                 -(p.y * r2 - 2 * a * p.x * r - a * a * p.y) * dr[2] /
+                {(p.x * dr[2]) / (r2+a*a) - 2.*r*(r*p.x+a*p.y) * dr[2] / ((r2+a*a)*(r2+a*a)),
+                 (p.y * dr[2]) / (r2 + a*a) - 2. * r * dr[2] * (p.y*r - a*p.x) /
                      ((r2 + a * a) * (r2 + a * a)),
                  -(p.z * dr[2] - r) / r2}};
+
 
             const CCTK_REAL dbeta[3][3] = {
                         {df[0]*l_d[0] + f * dl[0][0], df[0]*l_d[1]+f*dl[0][1], df[0]*l_d[2] + f * dl[0][2]},
@@ -369,6 +369,124 @@ extern "C" void ParticlesContainer_init_metric(CCTK_ARGUMENTS) {
             kyz(p.I) = 0.0;
             kzz(p.I) = 0.0;
           }
-        });
+        }
+        );
+  } else if (!std::strcmp(metric, "Painleve")) {
+
+    CCTK_INFO("Initializing Painlevé coordinates");
+
+    const double m = metric_params_d[0];
+
+    grid.loop_all_device<0, 0, 0>(
+        grid.nghostzones,
+        [=] CCTK_DEVICE(const Loop::PointDesc &p) CCTK_ATTRIBUTE_ALWAYS_INLINE {
+          const CCTK_REAL r2 = p.x * p.x + p.y * p.y + p.z * p.z;
+          CCTK_REAL r = sqrt(r2);
+
+          if (r2 < 10e-10) {
+            gxx(p.I) = 1.0;
+            gyy(p.I) = 1.0;
+            gzz(p.I) = 1.0;
+            gxy(p.I) = 0.0;
+            gxz(p.I) = 0.0;
+            gyz(p.I) = 0.0;
+
+            betax(p.I) = 0.0;
+            betay(p.I) = 0.0;
+            betaz(p.I) = 0.0;
+
+            alp(p.I) = 0.0;
+
+            kxx(p.I) = 0.0;
+            kxy(p.I) = 0.0;
+            kxz(p.I) = 0.0;
+            kyy(p.I) = 0.0;
+            kyz(p.I) = 0.0;
+            kzz(p.I) = 0.0;
+            return;
+          }
+
+            const CCTK_REAL f = sqrt(2. * m / r);
+
+            gxx(p.I) = 1.0;
+            gyy(p.I) = 1.0;
+            gzz(p.I) = 1.0;
+            gxy(p.I) = 0.0;
+            gxz(p.I) = 0.0;
+            gyz(p.I) = 0.0;
+
+            betax(p.I) = p.x * f / r;
+            betay(p.I) = p.y * f / r;
+            betaz(p.I) = p.z * f / r;
+
+            alp(p.I) = 1.0;
+
+            const CCTK_REAL dr[3] = {
+                p.x / r,
+                p.y / r,
+                p.z / r
+            };
+
+
+            const CCTK_REAL dbeta[3][3] = {
+                        {f / r - p.x * 3. * m *dr[0] / (r2 * r * f), - p.y * 3. * m * dr[0] / (r2 * r * f), - p.z * 3. * m * dr[0] / (r2 * r * f)},
+                        {-p.x * 3. * m * dr[1] / (r2 * r * f), f / r - p.y * 3 * m * dr[1] / (r2 * r * f) , - p.z * 3. * m * dr[1] / (r2 * r * f)},
+                        {-p.x * 3. * m * dr[2] / (r2 * r * f), - p.y * 3 * m * dr[2] / (r2 * r * f) , f / r - p.z * 3. * m * dr[2] / (r2 * r * f)}
+                    };
+
+
+            const CCTK_REAL dgamma[3][6] = {
+                        {
+                            0., 0., 0., 0., 0., 0.
+                        },
+                        {
+                            0., 0., 0., 0., 0., 0.
+                        },
+                        {
+                            0., 0., 0., 0., 0., 0.
+                        }
+                    };
+
+            kxx(p.I) = dbeta[0][0] + dbeta[0][0];
+            kxy(p.I) = dbeta[0][1] + dbeta[1][0];
+            kxz(p.I) = dbeta[0][2] + dbeta[2][0];
+            kyy(p.I) = dbeta[1][1] + dbeta[1][1];
+            kyz(p.I) = dbeta[1][2] + dbeta[2][1];
+            kzz(p.I) = dbeta[2][2] + dbeta[2][2];
+
+            const CCTK_REAL beta[3] = {betax(p.I), betay(p.I), betaz(p.I)};
+
+            kxx(p.I) -= beta[0] * (dgamma[0][0] + dgamma[0][0] - dgamma[0][0]);
+            kxx(p.I) -= beta[1] * (dgamma[0][1] + dgamma[0][1] - dgamma[1][0]); 
+            kxx(p.I) -= beta[2] * (dgamma[0][2] + dgamma[0][2] - dgamma[2][0]);
+
+            kxy(p.I) -= beta[0] * (dgamma[0][1] + dgamma[1][0] - dgamma[0][1]);
+            kxy(p.I) -= beta[1] * (dgamma[0][3] + dgamma[1][1] - dgamma[1][1]);
+            kxy(p.I) -= beta[2] * (dgamma[0][4] + dgamma[1][2] - dgamma[2][1]);
+
+            kxz(p.I) -= beta[0] * (dgamma[0][2] + dgamma[2][0] - dgamma[0][2]);
+            kxz(p.I) -= beta[1] * (dgamma[0][4] + dgamma[2][1] - dgamma[1][2]);
+            kxz(p.I) -= beta[2] * (dgamma[0][5] + dgamma[2][2] - dgamma[2][2]);
+
+            kyy(p.I) -= beta[0] * (dgamma[1][1] + dgamma[1][1] - dgamma[0][3]);
+            kyy(p.I) -= beta[1] * (dgamma[1][3] + dgamma[1][3] - dgamma[1][3]);
+            kyy(p.I) -= beta[2] * (dgamma[1][4] + dgamma[1][4] - dgamma[2][3]);
+
+            kyz(p.I) -= beta[0] * (dgamma[1][2] + dgamma[2][1] - dgamma[0][4]);
+            kyz(p.I) -= beta[1] * (dgamma[1][4] + dgamma[2][3] - dgamma[1][4]);
+            kyz(p.I) -= beta[2] * (dgamma[2][5] + dgamma[2][4] - dgamma[2][4]);
+
+            kzz(p.I) -= beta[0] * (dgamma[2][2] + dgamma[2][2] - dgamma[0][5]);
+            kzz(p.I) -= beta[1] * (dgamma[2][4] + dgamma[2][4] - dgamma[1][5]);
+            kzz(p.I) -= beta[2] * (dgamma[2][5] + dgamma[2][5] - dgamma[2][5]);
+
+            kxx(p.I) /= (2. * alp(p.I));
+            kxy(p.I) /= (2. * alp(p.I));
+            kxz(p.I) /= (2. * alp(p.I));
+            kyy(p.I) /= (2. * alp(p.I));
+            kyz(p.I) /= (2. * alp(p.I));
+            kzz(p.I) /= (2. * alp(p.I));
+        }
+        );
   }
 }

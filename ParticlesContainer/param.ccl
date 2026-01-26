@@ -135,6 +135,7 @@ KEYWORD metric "metric to initialize" {
     "Isotropic Schwarzschild" :: "Schwarzswchild metric in Isotropic coordinates"
     "Schwarzschild" :: "Schwarzswchild metric"
     "Kerr-Shild" :: "Kerr-Shild metric"
+    "Painleve" :: "Painleve metric"
     "none" :: "Not initialize using a metric"
 } "none" 
 
